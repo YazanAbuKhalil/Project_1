@@ -1,80 +1,117 @@
 // create an array of images objects
-const images = [
+const cards = [
   {
     imageUrl: "images/car.jpg",
-    class: 3,
+    id: 3,
   },
   {
     imageUrl: "images/laptop.png",
-    class: 5,
+    id: 5,
   },
   {
     imageUrl: "images/apple.jpg",
-    class: 1,
+    id: 1,
   },
   {
     imageUrl: "images/house.png",
-    class: 4,
+    id: 4,
   },
 
   {
     imageUrl: "images/banana.png",
-    class: 2,
+    id: 2,
   },
   {
     imageUrl: "images/laptop.png",
-    class: 5,
+    id: 5,
   },
 
   {
     imageUrl: "images/apple.jpg",
-    class: 1,
+    id: 1,
   },
   {
     imageUrl: "images/car.jpg",
-    class: 3,
+    id: 3,
   },
   {
     imageUrl: "images/lemon.jpg",
-    class: 6,
+    id: 6,
   },
   {
     imageUrl: "images/house.png",
-    class: 4,
+    id: 4,
   },
 
   {
     imageUrl: "images/lemon.jpg",
-    class: 6,
+    id: 6,
   },
 
   {
     imageUrl: "images/banana.png",
-    class: 2,
+    id: 2,
   },
 ];
 
+// shufflecards when load the page
 const shuffleArray = (array) => {
   const random = Math.floor(Math.random() * array.length);
 
   array.sort((a, b) => {
-    if (a.class < array[random].class) {
+    if (a.id < array[random].id) {
       return -1;
     } else {
       return 1;
     }
   });
 };
-
-shuffleArray(images);
+shuffleArray(cards);
 
 // starter elements
 const body = document.querySelector("body");
 
-const gameContainer = document.createElement("div");
+const gameContainer = document.querySelector(".container");
 
-body.append(gameContainer);
+// check card function
+let activeId;
+let activeCard;
+const checkCard = (e) => {
+  const curruntCard = e.target.parentElement;
 
+  // if not any card is active
+  if (!isActive) {
+    activeCard = curruntCard;
+    activeId = curruntCard.id;
+    console.log(activeId);
+    isActive = true;
+  } // if we have choosen the first card
+  else {
+    // check if the current card equals the first card
+    if (curruntCard.id == activeId && curruntCard != activeCard) {
+      console.log("correct answer");
+      isActive = false;
+    }
+  }
+};
+
+// render cards elements
+let isActive = false;
+cards.forEach((card, index) => {
+  const cardDiv = document.createElement("div");
+  const img = document.createElement("img");
+
+  cardDiv.id = card.id;
+  img.src = card.imageUrl;
+
+  cardDiv.append(img);
+
+  gameContainer.append(cardDiv);
+
+  cardDiv.addEventListener("click", checkCard);
+});
+
+/*
 const renderCards = (image) => {
   // create a new card
   const card = document.createElement("div");
@@ -86,23 +123,30 @@ const renderCards = (image) => {
   card.style.width = "60px";
   card.style.height = "60px";
 
+ 
+
   card.style.border = "2px solid black";
   gameContainer.append(card);
   // set iintial width and height values for card
   card.style.width = "60px";
   card.style.height = "60px";
+  card.style.transformStyle = 'preserve-3d';
+  card.style.transition = 'all 0.5s'
 
   // create image element
-  const img = document.createElement("img");
+   // create the front side
+  
+  const backImage = document.createElement("img");
   img.src = image.imageUrl;
 
   // set height and width for image
-  img.style.width = "60px";
-  img.style.height = "60px";
+  backImage.style.width = "60px";
+  backImage.style.height = "60px";
 
-  card.append(img);
+  card.append(backImage);
 };
 
 images.forEach((image) => {
   renderCards(image);
 });
+*/
