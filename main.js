@@ -73,71 +73,76 @@ const body = document.querySelector("body");
 
 const gameContainer = document.querySelector(".container");
 
-// creat audio 
-const clickSound = document.createElement('audio');
-clickSound.src = 'sounds/click.wav';
+// play game button
+const playGame = document.createElement("button");
+playGame.innerText = "Play Game";
+body.append(playGame);
 
-const failedSound = document.createElement('audio');
-failedSound.src = 'sounds/failed.wav';
+const startPlaying = () => {
+  // creat audio
+  const clickSound = document.createElement("audio");
+  clickSound.src = "sounds/click.wav";
 
-const sucessSound = document.createElement('audio');
-sucessSound.src = 'sounds/success.wav';
+  const failedSound = document.createElement("audio");
+  failedSound.src = "sounds/failed.wav";
 
-// check card function
-let activeId;
-let activeCard;
-let failedAttempts = 0;
-const checkCard = (e) => {
-  clickSound.play();
-  const curruntCard = e.target.parentElement;
+  const sucessSound = document.createElement("audio");
+  sucessSound.src = "sounds/success.wav";
 
-  // if not any card is active
-  if (!isActive) {
+  // check card function
+  let activeId;
+  let activeCard;
+  let failedAttempts = 0;
+  const checkCard = (e) => {
+    clickSound.play();
+    const curruntCard = e.target.parentElement;
 
-    activeCard = curruntCard;
-    activeId = curruntCard.id;
+    // if not any card is active
+    if (!isActive) {
+      activeCard = curruntCard;
+      activeId = curruntCard.id;
 
-    console.log("Active now");
-    isActive = true;
-    curruntCard.removeEventListener("click", checkCard)
-  } // if we have choosen the first card
-  else {
-    // check if the current card equals the first card
-    if (curruntCard.id == activeId && curruntCard != activeCard) {
-      // disappear the two elements from the screen
-      sucessSound.play();
-      activeCard.style.display = 'none';
-      curruntCard.style.display = 'none'
-
-      console.log("correct answer");
-      isActive = false;
-    }
+      console.log("Active now");
+      isActive = true;
+      curruntCard.removeEventListener("click", checkCard);
+    } // if we have choosen the first card
     else {
-      failedSound.play();
-      failedAttempts += 1;
-      if (failedAttempts === 3) {
-        body.style.display = 'none';
-        
+      // check if the current card equals the first card
+      if (curruntCard.id == activeId && curruntCard != activeCard) {
+        // disappear the two elements from the screen
+        sucessSound.play();
+        activeCard.style.display = "none";
+        curruntCard.style.display = "none";
+
+        console.log("correct answer");
+        isActive = false;
+      } else {
+        failedSound.play();
+        failedAttempts += 1;
+        if (failedAttempts === 3) {
+          body.style.display = "none";
+        }
+        console.log(failedAttempts);
       }
-      console.log(failedAttempts);
     }
-  }
+  };
+
+  // render cards elements
+  let isActive = false;
+  cards.forEach((card, index) => {
+    const cardDiv = document.createElement("div");
+    const img = document.createElement("img");
+
+    cardDiv.id = card.id;
+    cardDiv.classList.add("hide");
+    img.src = card.imageUrl;
+
+    cardDiv.append(img);
+
+    gameContainer.append(cardDiv);
+
+    cardDiv.addEventListener("click", checkCard);
+  });
 };
 
-// render cards elements
-let isActive = false;
-cards.forEach((card, index) => {
-  const cardDiv = document.createElement("div");
-  const img = document.createElement("img");
-
-  cardDiv.id = card.id;
-  cardDiv.classList.add("hide");
-  img.src = card.imageUrl;
-
-  cardDiv.append(img);
-
-  gameContainer.append(cardDiv);
-
-  cardDiv.addEventListener("click", checkCard);
-});
-
+playGame.addEventListener("click", startPlaying);
