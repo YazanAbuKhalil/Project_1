@@ -1,62 +1,68 @@
 // create an array of images objects
 const images = [
   {
-    imageUrl: "images/apple.jpg",
-    class: 1,
-  },
-  {
-    imageUrl: "images/apple.jpg",
-    class: 1,
-  },
-  {
-    imageUrl: "images/banana.png",
-    class: 2,
-  },
-  {
-    imageUrl: "images/banana.png",
-    class: 2,
-  },
-  {
     imageUrl: "images/car.jpg",
     class: 3,
-  },
-  {
-    imageUrl: "images/car.jpg",
-    class: 3,
-  },
-  {
-    imageUrl: "images/house.png",
-    class: 4,
-  },
-  {
-    imageUrl: "images/house.png",
-    class: 4,
   },
   {
     imageUrl: "images/laptop.png",
     class: 5,
   },
   {
+    imageUrl: "images/apple.jpg",
+    class: 1,
+  },
+  {
+    imageUrl: "images/house.png",
+    class: 4,
+  },
+
+  {
+    imageUrl: "images/banana.png",
+    class: 2,
+  },
+  {
     imageUrl: "images/laptop.png",
     class: 5,
   },
+
+  {
+    imageUrl: "images/apple.jpg",
+    class: 1,
+  },
+  {
+    imageUrl: "images/car.jpg",
+    class: 3,
+  },
   {
     imageUrl: "images/lemon.jpg",
     class: 6,
   },
   {
+    imageUrl: "images/house.png",
+    class: 4,
+  },
+
+  {
     imageUrl: "images/lemon.jpg",
     class: 6,
+  },
+
+  {
+    imageUrl: "images/banana.png",
+    class: 2,
   },
 ];
 
 const shuffleArray = (array) => {
-  array.sort((a, b) => a - b);
+  const random = Math.floor(Math.random() * array.length);
 
-  array.forEach((element) => {
-    const random = Math.floor(Math.random() * array.length);
-
-    [element, array[random]] = [array[random], element];
+  array.sort((a, b) => {
+    if (a.class < array[random].class) {
+      return -1;
+    } else {
+      return 1;
+    }
   });
 };
 
