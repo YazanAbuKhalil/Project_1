@@ -73,24 +73,53 @@ const body = document.querySelector("body");
 
 const gameContainer = document.querySelector(".container");
 
+// creat audio 
+const clickSound = document.createElement('audio');
+clickSound.src = 'sounds/click.wav';
+
+const failedSound = document.createElement('audio');
+failedSound.src = 'sounds/failed.wav';
+
+const sucessSound = document.createElement('audio');
+sucessSound.src = 'sounds/success.wav';
+
 // check card function
 let activeId;
 let activeCard;
+let failedAttempts = 0;
 const checkCard = (e) => {
+  clickSound.play();
   const curruntCard = e.target.parentElement;
 
   // if not any card is active
   if (!isActive) {
+
     activeCard = curruntCard;
     activeId = curruntCard.id;
-    console.log(activeId);
+
+    console.log("Active now");
     isActive = true;
+    curruntCard.removeEventListener("click", checkCard)
   } // if we have choosen the first card
   else {
     // check if the current card equals the first card
     if (curruntCard.id == activeId && curruntCard != activeCard) {
+      // disappear the two elements from the screen
+      sucessSound.play();
+      activeCard.style.display = 'none';
+      curruntCard.style.display = 'none'
+
       console.log("correct answer");
       isActive = false;
+    }
+    else {
+      failedSound.play();
+      failedAttempts += 1;
+      if (failedAttempts === 3) {
+        body.style.display = 'none';
+        
+      }
+      console.log(failedAttempts);
     }
   }
 };
@@ -102,6 +131,7 @@ cards.forEach((card, index) => {
   const img = document.createElement("img");
 
   cardDiv.id = card.id;
+  cardDiv.classList.add("hide");
   img.src = card.imageUrl;
 
   cardDiv.append(img);
@@ -111,42 +141,3 @@ cards.forEach((card, index) => {
   cardDiv.addEventListener("click", checkCard);
 });
 
-/*
-const renderCards = (image) => {
-  // create a new card
-  const card = document.createElement("div");
-  card.classList.add(image.class);
-
-  card.style.border = "2px solid black";
-  gameContainer.append(card);
-  // set iintial width and height values for card
-  card.style.width = "60px";
-  card.style.height = "60px";
-
- 
-
-  card.style.border = "2px solid black";
-  gameContainer.append(card);
-  // set iintial width and height values for card
-  card.style.width = "60px";
-  card.style.height = "60px";
-  card.style.transformStyle = 'preserve-3d';
-  card.style.transition = 'all 0.5s'
-
-  // create image element
-   // create the front side
-  
-  const backImage = document.createElement("img");
-  img.src = image.imageUrl;
-
-  // set height and width for image
-  backImage.style.width = "60px";
-  backImage.style.height = "60px";
-
-  card.append(backImage);
-};
-
-images.forEach((image) => {
-  renderCards(image);
-});
-*/
