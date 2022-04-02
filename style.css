@@ -85,3 +85,12 @@ img {
   display: flexbox;
   flex-direction: column;
 }
+
+.hide {
+  display: none;
+}
+.show {
+  /* display: inline-block; */
+  /* transform: rotateX(180deg); */
+
+}

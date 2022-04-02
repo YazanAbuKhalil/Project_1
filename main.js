@@ -69,49 +69,43 @@ const shuffleArray = (array) => {
 shuffleArray(cards);
 
 // starter elements
-const body = document.querySelector("body");
+const select = (element) => {
+  return document.querySelector(element);
+};
 
-const gameContainer = document.querySelector(".container");
+const body = select("body");
+const gameContainer = select(".container");
+const scoreEl = select(".score");
+const triesEl = select(".tries");
+const winScreen = select(".win");
+const gameInfo = select(".game-info");
+gameInfo.style.display = "none";
 
-const scoreEl = document.querySelector(".score").lastElementChild;
+// creat audio for the game
+const createAudio = (src) => {
+  const element = document.createElement("audio");
+  element.src = src;
+  return element;
+};
 
-const triesEl = document.querySelector(".tries").lastElementChild;
+const clickSound = createAudio("sounds/click.wav");
+const failedSound = createAudio("sounds/failed.wav");
+const sucessSound = createAudio("sounds/success.wav");
+const gameOverSound = createAudio("sounds/gameover.wav");
+const winSound = createAudio("sounds/win.wav");
+const startGameSound = createAudio("sounds/startgame.mp3");
 
-const winScreen = document.querySelector(".win");
-
-
-const gameInfo = document.querySelector(".game-info");
-
-gameInfo.style.display = 'none';
 // play Game button
 const playGame = document.createElement("button");
 playGame.classList.add("play");
 playGame.innerText = "Play Game";
 gameContainer.append(playGame);
 
-// creat audio
-const clickSound = document.createElement("audio");
-clickSound.src = "sounds/click.wav";
-
-const failedSound = document.createElement("audio");
-failedSound.src = "sounds/failed.wav";
-
-const sucessSound = document.createElement("audio");
-sucessSound.src = "sounds/success.wav";
-
-const gameOverSound = document.createElement("audio");
-gameOverSound.src = "sounds/gameover.wav";
-
-const winSound = document.createElement("audio");
-winSound.src = "sounds/win.wav"
-
-const startGameSound = document.createElement("audio");
-startGameSound.src = "sounds/startgame.mp3"
-
 const startPlaying = () => {
-  gameInfo.style.display = 'flex';
+  gameInfo.style.display = "flex";
   startGameSound.play();
-  // check card function
+  
+  // starter conditions
   let activeId;
   let activeCard;
   let failedAttempts = 0;
@@ -127,29 +121,44 @@ const startPlaying = () => {
     if (!isActive) {
       activeCard = curruntCard;
       activeId = curruntCard.id;
-
-      console.log("Active now");
       isActive = true;
+      const originalImage = activeCard.firstChild;
+      const fakeImage = activeCard.getElementsByTagName('img')[1]
+      // show the image and hide the fake image
+      originalImage.classList.remove('hide')
+      fakeImage.classList.add('hide');
+
       curruntCard.removeEventListener("click", checkCard);
     } // if we have choosen the first card
     else {
       // check if the current card equals the first card
       if (curruntCard.id == activeId && curruntCard != activeCard) {
 
-        sucessSound.play();
+   
 
         // increase score
         score += 10;
         scoreEl.innerText = score;
 
+        // show the image
+        const originalImage = curruntCard.firstChild;
+        const fakeImage =curruntCard.getElementsByTagName('img')[1]
+        originalImage.classList.remove('hide');
+        fakeImage.classList.add('hide')
+        console.log(originalImage);
+        console.log(fakeImage);
         // delete cards from cards array
         cards.splice(cards.indexOf(curruntCard), 1);
         cards.splice(cards.indexOf(activeCard), 1);
-        console.log(cards);
+      
 
-        // disappear the two elements from the screen
-        activeCard.style.display = "none";
-        curruntCard.style.display = "none";
+        // Hide the two elements from the screen
+        setTimeout(() => {
+          activeCard.style.display = "none";
+          curruntCard.style.display = "none";
+          sucessSound.play();
+        }, 1000);
+  
 
         // you win
         if (cards.length === 0) {
@@ -157,9 +166,17 @@ const startPlaying = () => {
           gameContainer.style.display = "none";
           winSound.play();
         }
-        console.log("correct answer");
         isActive = false;
       } else {
+        const originalImage = curruntCard.firstChild;
+        const fakeImage =curruntCard.getElementsByTagName('img')[1]
+        originalImage.classList.remove('hide');
+        fakeImage.classList.add('hide');
+        setTimeout (() => {
+          originalImage.classList.add('hide');
+          fakeImage.classList.remove('hide')
+        }, 2000);
+        
         failedSound.play();
         failedAttempts += 1;
         triesEl.innerText = failedAttempts;
@@ -168,8 +185,8 @@ const startPlaying = () => {
         if (failedAttempts === 3) {
           body.style.display = "none";
           gameOverSound.play();
+          
         }
-        console.log(failedAttempts);
       }
     }
   };
@@ -177,21 +194,30 @@ const startPlaying = () => {
   // render cards elements
 
   cards.forEach((card, index) => {
+    // create card element with img and id 
     const cardDiv = document.createElement("div");
-    const img = document.createElement("img");
-
     cardDiv.id = card.id;
-    cardDiv.classList.add("hide");
+ 
+    const img = document.createElement("img");
     img.src = card.imageUrl;
 
     cardDiv.append(img);
-
     gameContainer.append(cardDiv);
+
+    // create the anonmes image to start 
+    const starterImage = document.createElement("img");
+    starterImage.src = "images/questionmark.jpg";
+
+    // hide images after 2 seconds when the the game is starting
+    setTimeout(() => {
+      img.classList.add("hide");
+      cardDiv.append(starterImage);
+    }, 2000);
 
     cardDiv.addEventListener("click", checkCard);
   });
-
-  playGame.style.display = "none";
+  playGame.classList.add('hide');
 };
 
+// click play game and strt the game
 playGame.addEventListener("click", startPlaying);
