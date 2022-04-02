@@ -1,19 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memory card game</title>
-    <link href="style.css" rel="stylesheet" type="text/css">
-</head>
-<body>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
     <h1>Memory Card</h1>
     <div class="container"></div>
-    <div class="attempts">
-        Number of tries: 
+
+    <div class="game-info">
+      <div class="score">
+        <p>Score:</p>
+        <p>0</p>
+      </div>
+
+      <div class="tries">
+        <p>Tries:</p>
+        <p>0</p>
+      </div>
+
+      <div class="level">
+        <p>Level:</p>
+        <p>1</p>
+      </div>
+      
+    </div>
+
+    <div class="win win2">
+      <img src="images/win.png" />
+      <h2>You win</h2>
+      <div class="win-buttons">
+        <button class="play-again">Play Again</button>
+        <button>Next Level</button>
+      </div>
     </div>
     <script src="main.js"></script>
-    
-</body>
+  </body>
 </html>
