@@ -79,7 +79,7 @@ const scoreEl = select(".score");
 const triesEl = select(".tries");
 const winScreen = select(".win");
 const gameInfo = select(".game-info");
-gameInfo.style.display = "none";
+gameInfo.classList.add("hide");
 
 // creat audio for the game
 const createAudio = (src) => {
@@ -101,11 +101,17 @@ playGame.classList.add("play");
 playGame.innerText = "Play Game";
 gameContainer.append(playGame);
 
+// timer before start
+const timerEl = document.querySelector('.timer-div')
+const time = document.querySelector('.timer');
+timerEl.classList.add('hide')
 const startPlaying = () => {
-  gameInfo.style.display = "flex";
+  timerEl.classList.remove('hide')
+  gameInfo.classList.remove("hide");
   startGameSound.play();
-  
+
   // starter conditions
+  let timer = 60;
   let activeId;
   let activeCard;
   let failedAttempts = 0;
@@ -113,79 +119,86 @@ const startPlaying = () => {
   let score = 0;
   let level = 1;
 
+  // set timer for the game
+  time.innerText = timer;
+
+  const refId = setInterval(() => {
+    timer--;
+    time.innerText = timer;
+    console.log(timer);
+  }, 1000);
+
+  setTimeout(() => {
+    clearInterval(refId);
+    body.style.display = "none";
+    gameOverSound.play();
+  }, 60000);
+
+
   const checkCard = (e) => {
     clickSound.play();
     const curruntCard = e.target.parentElement;
+
+    const originalImage = curruntCard.firstChild;
+    const fakeImage = curruntCard.getElementsByTagName("img")[1];
 
     // if not any card is active
     if (!isActive) {
       activeCard = curruntCard;
       activeId = curruntCard.id;
       isActive = true;
-      const originalImage = activeCard.firstChild;
-      const fakeImage = activeCard.getElementsByTagName('img')[1]
+
       // show the image and hide the fake image
-      originalImage.classList.remove('hide')
-      fakeImage.classList.add('hide');
+      originalImage.classList.remove("hide");
+      fakeImage.classList.add("hide");
 
       curruntCard.removeEventListener("click", checkCard);
     } // if we have choosen the first card
     else {
       // check if the current card equals the first card
       if (curruntCard.id == activeId && curruntCard != activeCard) {
-
-   
-
         // increase score
         score += 10;
-        scoreEl.innerText = score;
+        scoreEl.getElementsByTagName("p")[1].innerText = score;
 
         // show the image
-        const originalImage = curruntCard.firstChild;
-        const fakeImage =curruntCard.getElementsByTagName('img')[1]
-        originalImage.classList.remove('hide');
-        fakeImage.classList.add('hide')
-        console.log(originalImage);
-        console.log(fakeImage);
+        originalImage.classList.remove("hide");
+        fakeImage.classList.add("hide");
+
         // delete cards from cards array
         cards.splice(cards.indexOf(curruntCard), 1);
         cards.splice(cards.indexOf(activeCard), 1);
-      
 
         // Hide the two elements from the screen
         setTimeout(() => {
-          activeCard.style.display = "none";
-          curruntCard.style.display = "none";
+          activeCard.classList.add("hide");
+          curruntCard.classList.add("hide");
           sucessSound.play();
-        }, 1000);
-  
+        }, 500);
 
+        isActive = false;
         // you win
         if (cards.length === 0) {
-          gameInfo.style.display = "none";
-          gameContainer.style.display = "none";
+          gameInfo.classList.add("hide");
+          gameContainer.classList.add("hide");
           winSound.play();
         }
-        isActive = false;
       } else {
-        const originalImage = curruntCard.firstChild;
-        const fakeImage =curruntCard.getElementsByTagName('img')[1]
-        originalImage.classList.remove('hide');
-        fakeImage.classList.add('hide');
-        setTimeout (() => {
-          originalImage.classList.add('hide');
-          fakeImage.classList.remove('hide')
-        }, 2000);
-        
+        originalImage.classList.remove("hide");
+        fakeImage.classList.add("hide");
+        setTimeout(() => {
+          originalImage.classList.add("hide");
+          fakeImage.classList.remove("hide");
+        }, 1000);
+
         failedSound.play();
         failedAttempts += 1;
-        triesEl.innerText = failedAttempts;
+        triesEl.getElementsByTagName("p")[1].innerText = failedAttempts;
 
         // Game over
-        if (failedAttempts === 3) {
+        if (failedAttempts === 5) {
           body.style.display = "none";
           gameOverSound.play();
-          
         }
       }
     }
@@ -194,17 +207,17 @@ const startPlaying = () => {
   // render cards elements
 
   cards.forEach((card, index) => {
-    // create card element with img and id 
+    // create card element with img and id
     const cardDiv = document.createElement("div");
     cardDiv.id = card.id;
- 
+
     const img = document.createElement("img");
     img.src = card.imageUrl;
 
     cardDiv.append(img);
     gameContainer.append(cardDiv);
 
-    // create the anonmes image to start 
+    // create the anonmes image to start
     const starterImage = document.createElement("img");
     starterImage.src = "images/questionmark.jpg";
 
@@ -216,7 +229,7 @@ const startPlaying = () => {
 
     cardDiv.addEventListener("click", checkCard);
   });
-  playGame.classList.add('hide');
+  playGame.classList.add("hide");
 };
 
 // click play game and strt the game
