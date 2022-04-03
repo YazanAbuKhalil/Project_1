@@ -5,25 +5,30 @@
 }
 
 body {
-  background-image: url(images/background.jpg);
+  background-image: url(images/background2.jpg);
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 h1 {
-  margin: 10px ;
+  font-size: 80px;
+  margin-left: 10px;
+  /* text-align: center; */
+  color: rgb(229, 155, 19);
+}
+
+.memory {
+  color: gray;
 }
 
 img {
-  width: 100px;
-  height: 100px;
+  width: 180px;
+  height: 120px;
   border: 2px solid black;
 }
 
-
-
 .container {
-  border: 4px solid black  ;
+  /* border: 4px solid black  ; */
   display: grid;
   grid-template-columns: repeat(4, auto);
   gap: 5px;
@@ -48,24 +53,32 @@ img {
   border: 2px solid black;
   display: flex;
   justify-content: space-around;
+  background-color: rgb(216, 176, 126);
 }
 
-.score, .tries, .level {
-  /* display: flex;
-  gap: 5px;
-  margin: 5px 0;
-  border: 1px solid rgb(108, 108, 230);
-  background-color: rgb(235, 245, 242); */
+.card-div:hover {
+  background-color: rgb(237, 184, 184);
+  cursor: pointer;
 }
 
-.score p:first-child, .tries p:first-child, .level p:first-child {
+.score p:first-child,
+.tries p:first-child,
+.level p:first-child {
   font-weight: bold;
+  font-size: 20px;
+}
+
+.score-2, .tries-2 {
+  border: 2px solid orangered;
+  text-align: center;
 }
 
 .play {
-  width: 150px;
+  width: 300px;
   padding: 10px;
-  margin: 10px 50%;
+  /* margin: 50px 50%; */
+  margin-top: 40%;
+  margin-left: 40%;
   color: aliceblue;
   font-size: 20px;
   font-weight: bold;
@@ -77,30 +90,64 @@ img {
   cursor: pointer;
 }
 
-.win {
-  display: none;
-}
-
-.win2 {
-  display: flexbox;
-  flex-direction: column;
-}
 .timer-div {
   display: flex;
   gap: 10px;
   justify-content: center;
 }
 
+/* win screen */
+.win-div {
+  margin: 100px;
+  display: flex;
+  flex-direction: column;
+  /* border: 5px solid rgb(211, 36, 36); */
+  align-items: center;
+}
+
+.win-buttons {
+  margin-top: 200px;
+  display: flex;
+  gap: 20px;
+}
+
+.play-again,
+.next {
+  width: 150px;
+  padding: 10px;
+  color: aliceblue;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: rgb(30, 30, 30);
+}
+
+.play-again:hover,
+.next:hover {
+  color: rgb(10, 101, 45);
+  cursor: pointer;
+}
+
+.gameover-div {
+  margin: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.play-again {
+  margin-top: 200px;
+}
+
+.try {
+  margin: 10px 50%;
+  background-color: rgb(136, 208, 42);
+}
+
 .hide {
   display: none;
 }
-.show {
-  /* display: inline-block; */
-  /* transform: rotateX(180deg); */
-
-}
-
 
 .timer {
+  border: 2px solid black;
   color: rgb(76, 27, 201);
 }

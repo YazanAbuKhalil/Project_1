@@ -8,9 +8,9 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Memory Card</h1>
+    <h1><span class="memory">Memory</span> Card</h1>
     <div class="timer-div">
-      <h4 class>timer :</h4>
+      <h4 class>Timer :</h4>
       <h4 class="timer"></h4>
     </div>
     <div class="container"></div>
@@ -18,28 +18,29 @@
     <div class="game-info">
       <div class="score">
         <p>Score:</p>
-        <p>0</p>
+        <p class="score-2">0</p>
       </div>
 
       <div class="tries">
         <p>Tries:</p>
-        <p>0</p>
+        <p class="tries-2">0</p>
       </div>
-
-      <div class="level">
-        <p>Level:</p>
-        <p>1</p>
-      </div>
-      
+ 
     </div>
 
-    <div class="win win2">
-      <img src="images/win.png" />
-      <h2>You win</h2>
+    <button class="play-again try">Retry</button>
+
+    <div class="win-div">
+      <h1 class="win-text">🎉🎉You win🎉🎉</h1>
       <div class="win-buttons">
         <button class="play-again">Play Again</button>
-        <button>Next Level</button>
+        <!-- <button class="next">Next Level</button> -->
       </div>
+    </div>
+
+    <div class="gameover-div">
+      <h1 class="gameover">👎☹Game Over☹👎</h1>
+      <button class="play-again">Try Again</button>
     </div>
     <script src="main.js"></script>
   </body>

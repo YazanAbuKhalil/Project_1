@@ -9,6 +9,10 @@ const cards = [
     id: 5,
   },
   {
+    imageUrl: "images/orange.png",
+    id: 8,
+  },
+  {
     imageUrl: "images/apple.jpg",
     id: 1,
   },
@@ -16,7 +20,10 @@ const cards = [
     imageUrl: "images/house.png",
     id: 4,
   },
-
+  {
+    imageUrl: "images/book.png",
+    id: 7,
+  },
   {
     imageUrl: "images/banana.png",
     id: 2,
@@ -35,8 +42,16 @@ const cards = [
     id: 3,
   },
   {
+    imageUrl: "images/book.png",
+    id: 7,
+  },
+  {
     imageUrl: "images/lemon.jpg",
     id: 6,
+  },
+  {
+    imageUrl: "images/orange.png",
+    id: 8,
   },
   {
     imageUrl: "images/house.png",
@@ -54,6 +69,8 @@ const cards = [
   },
 ];
 
+window.localStorage.setItem("cards", JSON.stringify(cards));
+console.log(localStorage);
 // shufflecards when load the page
 const shuffleArray = (array) => {
   const random = Math.floor(Math.random() * array.length);
@@ -77,8 +94,10 @@ const body = select("body");
 const gameContainer = select(".container");
 const scoreEl = select(".score");
 const triesEl = select(".tries");
-const winScreen = select(".win");
+const winScreen = select(".win-div");
 const gameInfo = select(".game-info");
+const gameOverScreen = select(".gameover-div");
+
 gameInfo.classList.add("hide");
 
 // creat audio for the game
@@ -99,14 +118,62 @@ const startGameSound = createAudio("sounds/startgame.mp3");
 const playGame = document.createElement("button");
 playGame.classList.add("play");
 playGame.innerText = "Play Game";
-gameContainer.append(playGame);
+body.append(playGame);
 
 // timer before start
-const timerEl = document.querySelector('.timer-div')
-const time = document.querySelector('.timer');
-timerEl.classList.add('hide')
+const timerEl = document.querySelector(".timer-div");
+const time = document.querySelector(".timer");
+timerEl.classList.add("hide");
+
+winScreen.classList.add("hide");
+gameOverScreen.classList.add("hide");
+gameContainer.classList.add("hide");
+
+
+// playagain button functionality
+const refresh = () => {
+  location.reload();
+};
+
+const playAgainButtons = document.querySelectorAll(".play-again");
+playAgainButtons.forEach((button) => {
+  button.addEventListener("click", refresh);
+});
+
+const tryButton = document.querySelector(".try");
+tryButton.classList.add("hide");
+
+// Game over function
+let isLoose = false;
+const gameOver = () => {
+  isLoose = true;
+  tryButton.classList.add("hide");
+  timerEl.classList.add("hide");
+  gameContainer.classList.add("hide");
+  winScreen.classList.add("hide");
+  gameInfo.classList.add("hide");
+  gameOverScreen.classList.remove("hide");
+  gameOverSound.play();
+};
+
+// win function
+let isWin = false;
+const youWin = () => {
+  isWin = true;
+  tryButton.classList.add("hide");
+  gameInfo.classList.add("hide");
+  gameContainer.classList.add("hide");
+  gameInfo.classList.add("hide");
+  winScreen.classList.remove("hide");
+  timerEl.classList.add("hide");
+  winSound.play();
+};
+
+// start playing function
 const startPlaying = () => {
-  timerEl.classList.remove('hide')
+  tryButton.classList.remove("hide");
+  gameContainer.classList.remove("hide");
+  timerEl.classList.remove("hide");
   gameInfo.classList.remove("hide");
   startGameSound.play();
 
@@ -114,13 +181,13 @@ const startPlaying = () => {
   let timer = 60;
   let activeId;
   let activeCard;
-  let failedAttempts = 0;
+  let numberOfTries = 7;
   let isActive = false;
   let score = 0;
-  let level = 1;
 
   // set timer for the game
   time.innerText = timer;
+  
 
   const refId = setInterval(() => {
     timer--;
@@ -130,15 +197,14 @@ const startPlaying = () => {
 
   setTimeout(() => {
     clearInterval(refId);
-    body.style.display = "none";
-    gameOverSound.play();
+    if (!isWin && !isLoose) {
+      gameOver();
+    }
   }, 60000);
-
 
   const checkCard = (e) => {
     clickSound.play();
     const curruntCard = e.target.parentElement;
-
     const originalImage = curruntCard.firstChild;
     const fakeImage = curruntCard.getElementsByTagName("img")[1];
 
@@ -152,13 +218,16 @@ const startPlaying = () => {
       originalImage.classList.remove("hide");
       fakeImage.classList.add("hide");
 
-      curruntCard.removeEventListener("click", checkCard);
+      //curruntCard.removeEventListener("click", checkCard);
     } // if we have choosen the first card
     else {
-      // check if the current card equals the first card
+      // success move
       if (curruntCard.id == activeId && curruntCard != activeCard) {
         // increase score
         score += 10;
+        if (score === 30 || score === 50) {
+          numberOfTries += 1;
+        }
         scoreEl.getElementsByTagName("p")[1].innerText = score;
 
         // show the image
@@ -171,34 +240,38 @@ const startPlaying = () => {
 
         // Hide the two elements from the screen
         setTimeout(() => {
-          activeCard.classList.add("hide");
-          curruntCard.classList.add("hide");
+          activeCard.style.visibility = "hidden";
+          curruntCard.style.visibility = "hidden";
+          // activeCard.classList.add("hide");
+          // curruntCard.classList.add("hide");
           sucessSound.play();
         }, 500);
 
         isActive = false;
         // you win
         if (cards.length === 0) {
-          gameInfo.classList.add("hide");
-          gameContainer.classList.add("hide");
-          winSound.play();
+          youWin();
         }
       } else {
         originalImage.classList.remove("hide");
         fakeImage.classList.add("hide");
         setTimeout(() => {
+          // hide the current element
           originalImage.classList.add("hide");
           fakeImage.classList.remove("hide");
-        }, 1000);
 
+          // hide the active element
+          activeCard.firstChild.classList.add("hide");
+          activeCard.getElementsByTagName("img")[1].classList.remove("hide");
+          isActive = false;
+        }, 1000);
         failedSound.play();
-        failedAttempts += 1;
-        triesEl.getElementsByTagName("p")[1].innerText = failedAttempts;
+        numberOfTries -= 1;
+        triesEl.getElementsByTagName("p")[1].innerText = numberOfTries;
 
         // Game over
-        if (failedAttempts === 5) {
-          body.style.display = "none";
-          gameOverSound.play();
+        if (numberOfTries === 0) {
+          gameOver();
         }
       }
     }
@@ -209,6 +282,7 @@ const startPlaying = () => {
   cards.forEach((card, index) => {
     // create card element with img and id
     const cardDiv = document.createElement("div");
+    cardDiv.classList.add("card-div");
     cardDiv.id = card.id;
 
     const img = document.createElement("img");
