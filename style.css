@@ -10,7 +10,7 @@ body {
   background-size: cover;
   width: 100%;
   height: 100%;
-  overflow-x: hidden; 
+  overflow-x: hidden;
 }
 
 h1 {
@@ -55,6 +55,7 @@ img {
 
 .game-info {
   /* margin: 5px 0; */
+  text-align: center;
   width: 100%;
   border: 2px solid black;
   display: flex;
@@ -66,7 +67,6 @@ img {
   cursor: pointer;
 }
 
-
 .score p:first-child,
 .tries p:first-child,
 .level p:first-child {
@@ -74,9 +74,13 @@ img {
   font-size: 20px;
 }
 
-.score-2, .tries-2 {
+.score-2,
+.tries-2 {
+  font-size: 15px;
   border: 2px solid orangered;
   text-align: center;
+  margin-bottom: 10px;
+  padding: 0px;
 }
 
 .play {
@@ -161,7 +165,6 @@ img {
   color: rgb(76, 27, 201);
 }
 
-
 @media all and (max-width: 600px) {
   .container {
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -171,9 +174,6 @@ img {
     overflow-x: hidden;
     margin-left: 5%;
     margin-right: 5%;
-
-   
-
   }
 
   img {
@@ -210,6 +210,3 @@ img {
     margin-right: 100%;
   }
 }
-
-
-
