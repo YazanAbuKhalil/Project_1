@@ -183,18 +183,6 @@ window.onload = () => {
     triesEl.getElementsByTagName("p")[1].innerText = 7;
   }
 
-  // // get last timer from local storage
-  // timer = JSON.parse(localStorage.getItem("timer"));
-  // time.innerText = timer;
-  // if (!timer) {
-  //   timer = 60;
-  //   time.innerText = 60;
-  // }
-
-  // // get last cards remines in the local storage
-  // cards = JSON.parse(localStorage.getItem("cards"));
-  // console.log(cards);
-
   // get last score data from local storage
   score = JSON.parse(localStorage.getItem("score"));
   scoreEl.getElementsByTagName("p")[1].innerText = score;
