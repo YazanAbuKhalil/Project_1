@@ -16,7 +16,6 @@ body {
 h1 {
   font-size: 80px;
   margin-left: 10px;
-  /* text-align: center; */
   color: rgb(229, 155, 19);
 }
 
@@ -31,7 +30,6 @@ img {
 }
 
 .container {
-  /* border: 4px solid black  ; */
   display: grid;
   grid-template-rows: repeat(4, auto);
   grid-template-columns: repeat(4, auto);
@@ -54,7 +52,6 @@ img {
 }
 
 .game-info {
-  /* margin: 5px 0; */
   text-align: center;
   width: 100%;
   border: 2px solid black;
@@ -86,7 +83,6 @@ img {
 .play {
   width: 300px;
   padding: 10px;
-  /* margin: 50px 50%; */
   margin-top: 40%;
   margin-left: 40%;
   color: aliceblue;
@@ -112,7 +108,6 @@ img {
   margin: 100px;
   display: flex;
   flex-direction: column;
-  /* border: 5px solid rgb(211, 36, 36); */
   align-items: center;
 }
 
@@ -166,7 +161,6 @@ img {
 }
 
 @media all and (max-width: 600px) {
- 
   .container {
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: repeat(4, 1fr);

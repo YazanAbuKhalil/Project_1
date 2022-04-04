@@ -123,6 +123,7 @@ const timerEl = document.querySelector(".timer-div");
 const time = document.querySelector(".timer");
 timerEl.classList.add("hide");
 
+// Hide elements when the game start
 winScreen.classList.add("hide");
 gameOverScreen.classList.add("hide");
 gameContainer.classList.add("hide");
@@ -133,12 +134,14 @@ const refresh = () => {
   localStorage.clear();
   scoreEl.getElementsByTagName("p")[1].innerText = 0;
 };
-
 const playAgainButtons = document.querySelectorAll(".play-again");
+
+// refresh the page when click play again and retry
 playAgainButtons.forEach((button) => {
   button.addEventListener("click", refresh);
 });
 
+// create retry button to restart game with new values
 const tryButton = document.querySelector(".try");
 tryButton.classList.add("hide");
 
@@ -168,16 +171,17 @@ const youWin = () => {
   winSound.play();
 };
 
+// initial values for score, timer and tries
 let score = 0;
 let numberOfTries = 7;
 let timer = 60;
 
 // default setting when reload the page and local storage
 window.onload = () => {
-  // get last tries data from llocal storage
+  // get last tries data from local storage
   numberOfTries = JSON.parse(localStorage.getItem("tries"));
   triesEl.getElementsByTagName("p")[1].innerText = numberOfTries;
-  // if we clear date from storage set the default value to 7
+  // if we clear data from storage set the default value to 7
   if (!numberOfTries) {
     numberOfTries = 7;
     triesEl.getElementsByTagName("p")[1].innerText = 7;
@@ -191,8 +195,10 @@ window.onload = () => {
     scoreEl.getElementsByTagName("p")[1].innerText = 0;
   }
 };
+
 // start playing function
 const startPlaying = () => {
+  // hide unnessasary elements
   tryButton.classList.remove("hide");
   gameContainer.classList.remove("hide");
   timerEl.classList.remove("hide");
@@ -200,25 +206,19 @@ const startPlaying = () => {
   startGameSound.play();
 
   // starter conditions
-
   let activeId;
   let activeCard;
   let isActive = false;
 
-  // let score = localStorage.setItem("score", JSON.stringify(score));
-  // console.log(score);
-  //score = JSON.parse(localStorage.getItem("score"));
-
   // set timer for the game
   time.innerText = timer;
-
   const refId = setInterval(() => {
     timer--;
-    // localStorage.setItem("timer", JSON.stringify(timer));
     time.innerText = timer;
     console.log(timer);
   }, 1000);
 
+  // end the timer after 60 seconds
   setTimeout(() => {
     clearInterval(refId);
     if (!isWin && !isLoose) {
@@ -226,6 +226,7 @@ const startPlaying = () => {
     }
   }, 60000);
 
+  // Game logic funtionality
   const checkCard = (e) => {
     clickSound.play();
     const curruntCard = e.target.parentElement;
@@ -241,19 +242,18 @@ const startPlaying = () => {
       // show the image and hide the fake image
       originalImage.classList.remove("hide");
       fakeImage.classList.add("hide");
-
-      //curruntCard.removeEventListener("click", checkCard);
     } // if we have choosen the first card
     else {
       // success move
       if (curruntCard.id == activeId && curruntCard != activeCard) {
         // increase score
-
         score += 10;
         scoreEl.getElementsByTagName("p")[1].innerText = score;
 
+        // store the new score in the local storage
         localStorage.setItem("score", JSON.stringify(score));
 
+        // increase number of tries
         if (score === 30 || score === 50) {
           numberOfTries += 1;
           localStorage.setItem("tries", JSON.stringify(numberOfTries));
@@ -264,21 +264,18 @@ const startPlaying = () => {
         fakeImage.classList.add("hide");
 
         // delete cards from cards array
-
         cards.splice(cards.indexOf(curruntCard), 1);
         cards.splice(cards.indexOf(activeCard), 1);
-        // localStorage.setItem("cards", JSON.stringify(cards));
 
         // Hide the two elements from the screen
         setTimeout(() => {
           activeCard.style.visibility = "hidden";
           curruntCard.style.visibility = "hidden";
-          // activeCard.classList.add("hide");
-          // curruntCard.classList.add("hide");
           sucessSound.play();
         }, 500);
 
         isActive = false;
+
         // you win
         if (cards.length === 0) {
           youWin();
@@ -297,6 +294,8 @@ const startPlaying = () => {
           isActive = false;
         }, 1000);
         failedSound.play();
+
+        // decrease number of tries and store the new value in the local storage
         numberOfTries -= 1;
         localStorage.setItem("tries", JSON.stringify(numberOfTries));
         triesEl.getElementsByTagName("p")[1].innerText = numberOfTries;
@@ -310,16 +309,15 @@ const startPlaying = () => {
   };
 
   // render cards elements
-
   cards.forEach((card, index) => {
     // create card element with img and id
     const cardDiv = document.createElement("div");
     cardDiv.classList.add("card-div");
     cardDiv.id = card.id;
 
+    // create the original image
     const img = document.createElement("img");
     img.src = card.imageUrl;
-
     cardDiv.append(img);
     gameContainer.append(cardDiv);
 
@@ -335,6 +333,7 @@ const startPlaying = () => {
 
     cardDiv.addEventListener("click", checkCard);
   });
+  // hide play game button
   playGame.classList.add("hide");
 };
 
